@@ -19,16 +19,12 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/jameswylde/SysAd">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
 <h3 align="center">SysAd.ps1</h3>
 
@@ -88,6 +84,11 @@ SysAd.ps1 is a collection of PowerShell functions served under a terminal interf
 
 ### Prerequisites
 
+
+* [RSAT for Active Directory tools](https://docs.microsoft.com/en-us/windows-server/remote/remote-server-administration-tools)
+
+* [Windows Terminal](https://github.com/microsoft/terminal)
+
 Although Windows Terminal is not a prerequiste, I highly recommend it for frequent terminal use (like this repo is targeted at), to install open Powershell and run:
 
   ```sh
@@ -110,43 +111,29 @@ If you do not have GIT, open 'Code' at the top of this repo, 'Download ZIP', dow
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
+Simple open Powershell or Windows Terminal as admin, cd into the SysAd folder and run:
 
 
+```sh
+  ./SysAd.ps1
+  ```
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- Features-->
+## Features
 
-- [] Feature 1
-- [] Feature 2
-- [] Feature 3
-    - [] Nested Feature
+The script is built around the task of quickly getting onto machines via. the command line which is done here using PaExec.exe, PsExec.exe and PSRemoting. As these sessions are silent, they're especially useful for non-intrusive works.
 
-See the [open issues](https://github.com/jameswylde/SysAd/issues) for a full list of proposed features (and known issues).
+It's also built around speed in mind, with the press of a button you can get a full list of logged on users, full software inventory, shutdown logs (invoked from where, with what, by who), largest file sizes - all within a second of pressing the designated key at the TUI menu.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+It also has misc functions included for bespoke tasks or tiresome GUI tasks, such as quickly searching your DHCP server for a hostname, lease, IP, scope or updating McAffee EPO and running a SNOW inventory. The terminal interface's simplicity means adapting the script for your bespoke functions is as simple as defining a function, adding its name to *function Show-Home* and then corresponding keypress to *Show-Home*. In recent times, I've added two functions - one to help alleviate Print-Nightmare issues with UAC prompts, it will connect to the target machine remove the printer driver UAC for 2 minutes, so printer drivers can be reinstalled without manual intervention, and then reverts. In the same group, is a SCCM/MECM Remote Control tool, which will connect to the machine and bypass the 'user approval' when remoting onto a machine with Remote Control - again reverting after 2 minutes.
 
+It also features a small Active Directory suite which brances off into it's own TUI, with some common tasks. Find all locked out users in an OU, search users and display key info (with option to unlock and reset passwords here) as well as some automation of AD group management and some reporting tools.
 
 
-<!-- CONTRIBUTING -->
-## Contributing
+```sh
+  ./SysAd.ps1
+  ```
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
@@ -162,20 +149,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@jamescw44](https://twitter.com/tjamescw44)
+James W - [@jamescw44](https://twitter.com/jamescw44)
 
-Project Link: [https://github.com/jameswylde/SysAd](https://github.com/jameswylde/SysAd)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
+Project [https://github.com/jameswylde/SysAd](https://github.com/jameswylde/SysAd)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

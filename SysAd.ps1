@@ -635,7 +635,7 @@ function Get-DHCPHostname {
     ## Add reservation search
     ## Add new DHCP reservation
 
-    Write-Host "  Searching DHCP by hostname on UK-HUB3-M1011" -ForegroundColor Black -BackgroundColor Green
+    Write-Host "  Searching DHCP by hostname on ENTER YOUR DHCP HOSTNAME HERE" -ForegroundColor Black -BackgroundColor Green
 
     Write-Host "`r`n"
 
@@ -643,7 +643,7 @@ function Get-DHCPHostname {
 
     Write-Host "`r`n"
 
-    Get-DhcpServerv4Lease -ComputerName uk-hub3-m1011 -ScopeID 0 | Where-Object {$_.Hostname -like "*$dhcpHN*"}
+    Get-DhcpServerv4Lease -ComputerName ENTER YOUR DHCP HOSTNAME HERE -ScopeID 0 | Where-Object {$_.Hostname -like "*$dhcpHN*"}
 
     Write-Host "`r`n"
 
