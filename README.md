@@ -67,7 +67,7 @@
 
 ![SysAD terminal interface](https://imgur.com/VAiLJWO.png)
 
-SysAd.ps1 is a collection of PowerShell functions served under a terminal interface aimed at System Administrators or Support aimed at remote support via the terminal, either Pa/Psexec.exe (CMD) or Powershell. One button fixes for common tasks or a quick connect - TUI is easy enough to add your own functions and configure bespoke tasks.
+SysAd.ps1 is a collection of PowerShell functions served under a terminal interface aimed at System Administrators or Support Engineers to quickly connect via terminal, either Pa/Psexec.exe (CMD) or Powershell, to assist in remote fixes or automating common tasks.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
