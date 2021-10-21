@@ -8,10 +8,9 @@ VERSION:
 LICENCE:
     MIT Licence
 PREREQUISITES:
-    Script works on assumption Pa/PsExec does not exist in $env:path - add PStools contents to C:\Temp
-    See #Modules
+    See repo for further info: https://github.com/jameswylde/SysAd
 PURPOSE:
-    One button fixes.
+    Quick connections for terminal support.
 
 #>
 
@@ -26,7 +25,7 @@ Import-Module ActiveDirectory
 Clear-Host
 
 #----------------------------------------------------------------------------------------#
-#   Lost and Found vars
+#   Lost and Found
 
 $dayGet = (get-date).DayOfWeek
 $dateGet = Get-Date -f "dddd - dd/MM/yyyy - hh:MM"
@@ -369,28 +368,6 @@ function Show-ActiveDirectoryMenu {
         Write-Host "`n `r "
 
 
-
-        <#
-                $search = Read-Host "Machine"
-
-        (Get-ADComputer -SearchBase "OU=GBR,OU=SK,DC=group,DC=wan" -Properties Name -Filter *|  Where-Object {$_.Name -like "*$search*"} | Select-Object -ExpandProperty Name -OutVariable $P).Name
-
-        Get-ADComputer -Identity $p.Name | Select-Object Name,Description,Enabled,OperatingSystemVersion,CanonicalName | Format-List
-   
-
-
-        $input9 = Read-Host "Enable machine [y/n]" 
-        switch($input9){
-                  y{ Enable-ADAccount -Identity $result
-                  }
-                  n{continue}
-                  default{write-warning "Y or N only."}
-                }
-        
-        Write-Host "`n `r "
-#>
-
-
     }
     
     
@@ -440,7 +417,7 @@ function Show-ActiveDirectoryMenu {
 #----------------------------------------------------------------------------------------#
 #   Landing
 
-#   To-do - add some useful info to landing 
+
 function Show-Landing {
 
         cls
@@ -456,6 +433,19 @@ function Show-Landing {
         $machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" -ForegroundColor White -BackgroundColor Black "" -NoNewLine; Read-Host).ToUpper()
         $script:machineName = $machineNamefull.Trim()
 
+        Write-Host "`n `r "
+
+        if(!(Test-Connection $machineName -Count 2 -Quiet)) {
+            Write-Host "             DOWN             " -ForegroundColor White -BackgroundColor Red
+
+        }
+        else {
+            Write-Host "              UP              " -ForegroundColor Black -BackgroundColor Green
+
+            }
+
+    Start-Sleep -S 2
+
 
 }
 
@@ -466,12 +456,15 @@ Show-Landing
 
 function Show-Home
 {
-    
-     param (
-           [string]$Title = $machineName
-     )
-     cls
+
+     cls 
+
+    param (
+            [string]$Title = $machineName
+          )
+
      Clear-Host
+     Write-Host "`n `r "
      Write-Host "    $Title    " -ForegroundColor Black -BackgroundColor Green
      Write-Host "`n `r "
      Write-Host "    1 - Ping"
@@ -485,7 +478,6 @@ function Show-Home
      Write-Host "    9 - Shutdown finder" 
      Write-Host "    D - DHCP Search" 
      Write-Host "    F - File sizes"
-     #Write-Host "    W - SpaceSniffer"
      Write-Host "    X - Outlook profile kill"
      Write-Host "    M - McAffee & Snow"
      Write-Host "    L - LSpush"
@@ -507,7 +499,7 @@ function Start-Ping {
      Write-Host "`n `r "
      Write-Host "  Pinging" $machineName -ForegroundColor Black -BackgroundColor Green
      Write-Host "`n `r "
-     ping $machinename
+     ping.exe $machinename
      Write-Host "`n `r "
 
 }
@@ -635,7 +627,7 @@ function Get-DHCPHostname {
     ## Add reservation search
     ## Add new DHCP reservation
 
-    Write-Host "  Searching DHCP by hostname on ENTER YOUR DHCP HOSTNAME HERE" -ForegroundColor Black -BackgroundColor Green
+    Write-Host "  Searching DHCP by hostname on DHCPSERVERNAMEHERE" -ForegroundColor Black -BackgroundColor Green
 
     Write-Host "`r`n"
 
@@ -643,7 +635,7 @@ function Get-DHCPHostname {
 
     Write-Host "`r`n"
 
-    Get-DhcpServerv4Lease -ComputerName ENTER YOUR DHCP HOSTNAME HERE -ScopeID 0 | Where-Object {$_.Hostname -like "*$dhcpHN*"}
+    Get-DhcpServerv4Lease -ComputerName DHCPSERVERNAMEHERE -ScopeID 0 | Where-Object {$_.Hostname -like "*$dhcpHN*"}
 
     Write-Host "`r`n"
 
@@ -714,9 +706,9 @@ function Get-LargestFiles {
      Write-Host "`r`n"
      $userName = Read-Host "User profile to query - C:\Users\"
      Write-Host "`r`n"
-     $recipientEmail = Read-Host "Recipient email address ('@smurfitkappa.co.uk' not required)"
+     $recipientEmail = Read-Host "Recipient email address ('@domain.co.uk' not required)"
      Write-Host "`r`n"
-     $senderEmail = Read-Host "Sender email address ('@smurfitkappa.co.uk' not required)"
+     $senderEmail = Read-Host "Sender email address ('@domainco.uk' not required)"
      $fileName = "File Size Report-$userName-$(Get-Date -Format 'dd-MM-yyyy').csv"
 
      Invoke-Command -ComputerName $machineName -ScriptBlock {Get-ChildItem c:\users\$using:userName\ -Recurse -ErrorAction SilentlyContinue | Sort-Object -Descending -Property Length | Select-Object -first 100 FullName, @{Name="Size (MB) ";Expression={[Math]::Round($_.length / 1MB, 2)}}} | Export-CSV -Path C:\temp\$fileName -NoTypeInformation
@@ -726,22 +718,10 @@ function Get-LargestFiles {
      <p>Please find attached a report detailing the largest files on your <em>C:\</em> drive.</p>
      <p>Consider the largest files that are no longer required for deletion, or by right-clicking the file and de-selecting <i>'Always keep on device'</i> so that it is stored in the OneDrive cloud instead. </p>
      <p>Should you have any personal files, these should not be stored on a corporate device, please move any (if any) to a personal device to ensure your device's security as well avoiding the risk of personal data loss.</p>
-     <p>UK IT</p>
-     <p><em>Note - this email was performed by a script and the results may not be without error.</em></p>
-     <p><strong>_______________________________________________________________</strong></p>
-     <p><strong>Service Desk</strong></p>
-     <p><em>UK IT</em></p>
-     <p>&hellip;</p>
-     <p><strong>Smurfit Kappa </strong>UK</p>
-     <p><em>3<sup>rd</sup> Floor, Cunard Building, Water Street, Liverpool, L3 1SF </em></p>
-     <p>&hellip;</p>
-     <p>Service Desk:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +44 (0) 345 023 0400</p>
-     <p>Out Of Hours:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+44 (0) 788 523 1562</p>
-     <p>&nbsp;</p>
      </html>
      "
 
-     Send-MailMessage -From $senderEmail@smurfitkappa.co.uk -To $recipientEmail@smurfitkappa.co.uk -CC $senderEmail@smurfitkappa.co.uk  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnFailure -Credential (Get-Credential -Message "Enter the credentials for SENDER") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
+     Send-MailMessage -From $senderEmail@domain.co.uk -To $recipientEmail@domain.co.uk -CC $senderEmail@domain  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnFailure -Credential (Get-Credential -Message "Enter the credentials for SENDER") -SmtpServer 'smtp.server.com' -Port 25
 
      Write-Host "`r`n"
      Write-Host "******************************************************************************" -ForegroundColor White -BackgroundColor Black
@@ -753,17 +733,6 @@ function Get-LargestFiles {
 
 }
 
-function Start-SpaceSniffer {
-
-    Write-Host "  SpaceSniffer on" $machineName -ForegroundColor Black -BackgroundColor Green
-
-    $argumentList9 = "\\$machineName -c C:\Temp\SpaceSniffer.exe scan ""C:\Users"" export ""grouped by folder"" 'c:\Temp\space_export.txt' autoclose"
-    Start-Process C:\temp\paexec.exe -ArgumentList $argumentList9
-
-    Write-Host "`n `r "
-
-
-}
 
 function Start-OSTkill {
 
@@ -974,13 +943,3 @@ do
 }
 until ($keyPress -eq 'q')
 
-
-#----------------------------------------------------------------------------------------#
-#   Scraps
-
-
-#----------------------------------------------------------------------------------------##
-
-# Functions to add
-
-# WMIC tools
