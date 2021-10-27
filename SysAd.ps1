@@ -8,9 +8,10 @@ VERSION:
 LICENCE:
     MIT Licence
 PREREQUISITES:
-    See repo for further info: https://github.com/jameswylde/SysAd
+    Script works on assumption Pa/PsExec does not exist in $env:path - add PStools contents to C:\Temp
+    See #Modules
 PURPOSE:
-    Quick connections for terminal support.
+    One button fixes.
 
 #>
 
@@ -25,7 +26,7 @@ Import-Module ActiveDirectory
 Clear-Host
 
 #----------------------------------------------------------------------------------------#
-#   Lost and Found
+#   Lost and Found vars
 
 $dayGet = (get-date).DayOfWeek
 $dateGet = Get-Date -f "dddd - dd/MM/yyyy - hh:MM"
@@ -368,6 +369,28 @@ function Show-ActiveDirectoryMenu {
         Write-Host "`n `r "
 
 
+
+        <#
+                $search = Read-Host "Machine"
+
+        (Get-ADComputer -SearchBase "OU=GBR,OU=SK,DC=group,DC=wan" -Properties Name -Filter *|  Where-Object {$_.Name -like "*$search*"} | Select-Object -ExpandProperty Name -OutVariable $P).Name
+
+        Get-ADComputer -Identity $p.Name | Select-Object Name,Description,Enabled,OperatingSystemVersion,CanonicalName | Format-List
+   
+
+
+        $input9 = Read-Host "Enable machine [y/n]" 
+        switch($input9){
+                  y{ Enable-ADAccount -Identity $result
+                  }
+                  n{continue}
+                  default{write-warning "Y or N only."}
+                }
+        
+        Write-Host "`n `r "
+#>
+
+
     }
     
     
@@ -417,29 +440,63 @@ function Show-ActiveDirectoryMenu {
 #----------------------------------------------------------------------------------------#
 #   Landing
 
+function Get-Weather {
+
+    param([string]$GeoLocation = "Liverpool") 
+    $dest = "http://wttr.in/${GeoLocation}?format=3"
+    $proxy = ([System.Net.WebRequest]::GetSystemWebproxy()).GetProxy($dest)
+    (Invoke-WebRequest -Proxy $proxy -ProxyUseDefaultCredentials $dest -UserAgent "curl" ).Content
+}
 
 function Show-Landing {
 
-        cls
+    param([int]$Seconds = 10)
+
+    $weatherGet = Get-Weather
+
+	for ([int]$i = 0; $i -lt $Seconds; $i++) {
+		CLS
+		Write-Output ""
+		$CurrentTime = Get-Date -format "dddd dd-MM-yyyy HH:mm:ss" 
+    }
+        CLS
 
         Write-Host "`n `r "
         Write-Host "`n `r "
         Write-Host " _____________________________" -ForegroundColor White -BackgroundColor Black
 
-        Write-Host "" $dateGet -ForegroundColor White -BackgroundColor Black
-        Write-Host " Hello, $env:UserName   "  -ForegroundColor White -BackgroundColor Black
+        Write-Host ""$CurrentTime -ForegroundColor White -BackgroundColor Black
+        Write-Host ""$weatherGet -NoNewline
 
+        # Display name
+       # $dom = $env:userdomain
+      #  $usr = $env:username
+     #   $usrFull = ([adsi]"WinNT://$dom/$usr,user").fullname
+        
+        $Hour = (Get-Date).Hour
+        If ($Hour -lt 12) {Write-Host " Good morning, $usr"-ForegroundColor White -BackgroundColor Black}
+        ElseIf ($Hour -gt 16) {Write-Host " Good evening, $($Env:UserName)"-ForegroundColor White -BackgroundColor Black}
+        Else {Write-Host " Good afternoon, $($Env:UserName)" -ForegroundColor White -BackgroundColor Black}
 
         $machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" -ForegroundColor White -BackgroundColor Black "" -NoNewLine; Read-Host).ToUpper()
         $script:machineName = $machineNamefull.Trim()
+        
 
         Write-Host "`n `r "
 
+
         if(!(Test-Connection $machineName -Count 2 -Quiet)) {
+            [System.Console]::Beep(200,400)
+            [System.Console]::Beep(200,400)
+            Start-Sleep -m 400
             Write-Host "             DOWN             " -ForegroundColor White -BackgroundColor Red
 
         }
         else {
+            [System.Console]::Beep(658,125)
+            [System.Console]::Beep(1320,500)
+            #[Console]::Beep(658, 125); [Console]::Beep(1320, 500)
+            Start-Sleep -m 100
             Write-Host "              UP              " -ForegroundColor Black -BackgroundColor Green
 
             }
@@ -456,6 +513,8 @@ Show-Landing
 
 function Show-Home
 {
+
+
 
      cls 
 
@@ -627,7 +686,7 @@ function Get-DHCPHostname {
     ## Add reservation search
     ## Add new DHCP reservation
 
-    Write-Host "  Searching DHCP by hostname on DHCPSERVERNAMEHERE" -ForegroundColor Black -BackgroundColor Green
+    Write-Host "  Searching DHCP by hostname on YOUR_DHCP_SERVER" -ForegroundColor Black -BackgroundColor Green
 
     Write-Host "`r`n"
 
@@ -635,7 +694,7 @@ function Get-DHCPHostname {
 
     Write-Host "`r`n"
 
-    Get-DhcpServerv4Lease -ComputerName DHCPSERVERNAMEHERE -ScopeID 0 | Where-Object {$_.Hostname -like "*$dhcpHN*"}
+    Get-DhcpServerv4Lease -ComputerName YOUR_DHCP_SERVER-ScopeID 0 | Where-Object {$_.Hostname -like "*$dhcpHN*"}
 
     Write-Host "`r`n"
 
@@ -706,9 +765,9 @@ function Get-LargestFiles {
      Write-Host "`r`n"
      $userName = Read-Host "User profile to query - C:\Users\"
      Write-Host "`r`n"
-     $recipientEmail = Read-Host "Recipient email address ('@domain.co.uk' not required)"
+     $recipientEmail = Read-Host "Recipient email address ('@smurfitkappa.co.uk' not required)"
      Write-Host "`r`n"
-     $senderEmail = Read-Host "Sender email address ('@domainco.uk' not required)"
+     $senderEmail = Read-Host "Sender email address ('@smurfitkappa.co.uk' not required)"
      $fileName = "File Size Report-$userName-$(Get-Date -Format 'dd-MM-yyyy').csv"
 
      Invoke-Command -ComputerName $machineName -ScriptBlock {Get-ChildItem c:\users\$using:userName\ -Recurse -ErrorAction SilentlyContinue | Sort-Object -Descending -Property Length | Select-Object -first 100 FullName, @{Name="Size (MB) ";Expression={[Math]::Round($_.length / 1MB, 2)}}} | Export-CSV -Path C:\temp\$fileName -NoTypeInformation
@@ -718,10 +777,22 @@ function Get-LargestFiles {
      <p>Please find attached a report detailing the largest files on your <em>C:\</em> drive.</p>
      <p>Consider the largest files that are no longer required for deletion, or by right-clicking the file and de-selecting <i>'Always keep on device'</i> so that it is stored in the OneDrive cloud instead. </p>
      <p>Should you have any personal files, these should not be stored on a corporate device, please move any (if any) to a personal device to ensure your device's security as well avoiding the risk of personal data loss.</p>
+     <p>UK IT</p>
+     <p><em>Note - this email was performed by a script and the results may not be without error.</em></p>
+     <p><strong>_______________________________________________________________</strong></p>
+     <p><strong>Service Desk</strong></p>
+     <p><em>UK IT</em></p>
+     <p>&hellip;</p>
+     <p><strong>Smurfit Kappa </strong>UK</p>
+     <p><em>3<sup>rd</sup> Floor, Cunard Building, Water Street, Liverpool, L3 1SF </em></p>
+     <p>&hellip;</p>
+     <p>Service Desk:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +44 (0) 345 023 0400</p>
+     <p>Out Of Hours:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+44 (0) 788 523 1562</p>
+     <p>&nbsp;</p>
      </html>
      "
 
-     Send-MailMessage -From $senderEmail@domain.co.uk -To $recipientEmail@domain.co.uk -CC $senderEmail@domain  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnFailure -Credential (Get-Credential -Message "Enter the credentials for SENDER") -SmtpServer 'smtp.server.com' -Port 25
+     Send-MailMessage -From $senderEmail@smurfitkappa.co.uk -To $recipientEmail@smurfitkappa.co.uk -CC $senderEmail@smurfitkappa.co.uk  -Subject "Largest Files on $clientName for $userName" -BodyAsHtml $htmlBody -Attachments c:\temp\$fileName -DeliveryNotificationOption OnFailure -Credential (Get-Credential -Message "Enter the credentials for SENDER") -SmtpServer 'mail.eu.smurfitkappa.com' -Port 25
 
      Write-Host "`r`n"
      Write-Host "******************************************************************************" -ForegroundColor White -BackgroundColor Black
@@ -826,7 +897,7 @@ function Add-SCCMRedKey {
     
                 # 30 mins to revert
             
-                [int]$time = 1800
+                [int]$time = 120
                 $length = $time / 100
                 for ($time; $time -gt 0; $time--) {
                      $min = [int](([string]($time/60)).split('.')[0])
@@ -858,6 +929,7 @@ function Add-SCCMRedKey {
     #>
 
 }
+
 
 
 #----------------------------------------------------------------------------------------#
@@ -943,3 +1015,13 @@ do
 }
 until ($keyPress -eq 'q')
 
+
+#----------------------------------------------------------------------------------------#
+#   Scraps
+
+
+#----------------------------------------------------------------------------------------##
+
+# Functions to add
+
+# WMIC tools
