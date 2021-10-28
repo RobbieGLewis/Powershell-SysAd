@@ -63,7 +63,7 @@ function Show-ActiveDirectoryMenu {
          Write-Host "    $Title    " -ForegroundColor Black -BackgroundColor Green
          Write-Host "`n `r "
          Write-Host "    1 - AD Get User info - Unlock - Password reset"
-         Write-Host "    2 - AD Find all UK locked out users"
+         Write-Host "    2 - AD Find all locked out users"
          Write-Host "    3 - AD Change Employeed ID"
          Write-Host "    4 - AD Copy Group Members to another Group" 
          Write-Host "    5 - AD Add all Members to a group from .txt" 
@@ -335,10 +335,10 @@ function Show-ActiveDirectoryMenu {
     function functionAD6 {
 
         Write-Host "`n `r "
-        Write-Host "  All locked out users UK" -ForegroundColor Black -BackgroundColor Green
+        Write-Host "  All locked out users " -ForegroundColor Black -BackgroundColor Green
         Write-Host "`n `r "
 
-        Search-ADAccount -SearchBase "OU=GBR,OU=SK,DC=group,DC=wan" –LockedOut | Get-ADUser -Properties lockoutTime,mail | Select-Object @{Name="Username";Expression={$_.sAMAccountName.ToUpper()}},@{Name="Name";Expression={$_.Name}},@{Name="Lockout Time";Expression={([datetime]::FromFileTime($_.lockoutTime).ToLocalTime())}},@{Name="Email";Expression={$_.mail}} | Sort-Object LockoutTime -Descending | Format-Table -AutoSize | Out-Host
+        Search-ADAccount -SearchBase "OU=GBR,OU=GBR,DC=group,DC=wan" –LockedOut | Get-ADUser -Properties lockoutTime,mail | Select-Object @{Name="Username";Expression={$_.sAMAccountName.ToUpper()}},@{Name="Name";Expression={$_.Name}},@{Name="Lockout Time";Expression={([datetime]::FromFileTime($_.lockoutTime).ToLocalTime())}},@{Name="Email";Expression={$_.mail}} | Sort-Object LockoutTime -Descending | Format-Table -AutoSize | Out-Host
 
 
     }
