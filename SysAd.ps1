@@ -40,7 +40,7 @@ function Start-RevertTimer {
     for ($time; $time -gt 0; $time--) {
          $min = [int](([string]($time/60)).split('.')[0])
          $text = " " + $min + " minutes " + ($time % 60) + " seconds left."
-         Write-Progress -Activity "Reverting SCCM registry key in" -Status $text -PercentComplete ($time / $length)
+         Write-Progress -Activity "Reverting SCCM remote control registry key in" -Status $text -PercentComplete ($time / $length)
          Start-Sleep 1
     }
 }
