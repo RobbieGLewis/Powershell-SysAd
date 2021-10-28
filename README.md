@@ -100,7 +100,8 @@ As well as some Active Directory tools (still adding)
 * Find machines and enable/disable
 
 
-The terminal interface's simplicity means adapting the script for your bespoke functions is as simple as defining a function, adding its name to *function Show-Home* and then corresponding keypress to *Show-Home*. In recent times, I've added two functions - one to help alleviate Print-Nightmare issues with UAC prompts, it will connect to the target machine remove the printer driver UAC for 2 minutes, so printer drivers can be reinstalled without manual intervention, and then reverts. In the same group, is a SCCM/MECM Remote Control tool, which will connect to the machine and bypass the 'user approval' when remoting onto a machine with Remote Control - again reverting after 2 minutes.
+The terminal interface's simplicity means adapting the script for your own bespoke functions is as simple as defining the function, adding its name to *function Show-Home* and then corresponding the corresponding keypress under *Show-Home*. 
+
 
 
 ```sh
