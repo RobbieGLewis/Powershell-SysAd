@@ -442,7 +442,7 @@ function Show-ActiveDirectoryMenu {
 
 function Get-Weather {
 
-    param([string]$GeoLocation = "Liverpool") 
+    param([string]$GeoLocation = "") #Add location <
     $dest = "http://wttr.in/${GeoLocation}?format=3"
     $proxy = ([System.Net.WebRequest]::GetSystemWebproxy()).GetProxy($dest)
     (Invoke-WebRequest -Proxy $proxy -ProxyUseDefaultCredentials $dest -UserAgent "curl" ).Content
@@ -463,22 +463,23 @@ function Show-Landing {
 
         Write-Host "`n `r "
         Write-Host "`n `r "
-        Write-Host " _____________________________" -ForegroundColor White -BackgroundColor Black
+        Write-Host " _____________________________"
 
-        Write-Host ""$CurrentTime -ForegroundColor White -BackgroundColor Black
+        Write-Host ""$CurrentTime
         Write-Host ""$weatherGet -NoNewline
 
         # Display name
-       # $dom = $env:userdomain
-      #  $usr = $env:username
-     #   $usrFull = ([adsi]"WinNT://$dom/$usr,user").fullname
+        # $dom = $env:userdomain
+        # $usr = $env:username
+        # $usrFull = ([adsi]"WinNT://$dom/$usr,user").fullname
+        # Gets Display name
         
         $Hour = (Get-Date).Hour
         If ($Hour -lt 12) {Write-Host " Good morning, $usr"-ForegroundColor White -BackgroundColor Black}
-        ElseIf ($Hour -gt 16) {Write-Host " Good evening, $($Env:UserName)"-ForegroundColor White -BackgroundColor Black}
-        Else {Write-Host " Good afternoon, $($Env:UserName)" -ForegroundColor White -BackgroundColor Black}
+        ElseIf ($Hour -gt 16) {Write-Host " Good evening, $($Env:UserName)"
+        Else {Write-Host " Good afternoon, $($Env:UserName)"}
 
-        $machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" -ForegroundColor White -BackgroundColor Black "" -NoNewLine; Read-Host).ToUpper()
+        $machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" "" -NoNewLine; Read-Host).ToUpper()
         $script:machineName = $machineNamefull.Trim()
         
 
@@ -580,7 +581,7 @@ function Start-PSSession {
      Write-Host "  Starting PS-Session with" $machineName -ForegroundColor Black -BackgroundColor Green
      Write-Host "`n `r "
 
-     c:\temp\psservice.exe \\$machineName -accepteula start winrm
+     .\psservice.exe \\$machineName -accepteula start winrm
 
      if(!(Test-Connection $machineName -Count 2 -Quiet)) {
           "$machineName is not reachable." 
@@ -758,7 +759,7 @@ function Get-LargestFiles {
 
     Write-Host "  Largest files on" $machineName -ForegroundColor Black -BackgroundColor Green
 
-    c:\temp\psservice.exe \\$machineName -accepteula start winrm
+    .\psservice.exe \\$machineName -accepteula start winrm
 
      Start-Sleep -Seconds 5  
 
@@ -854,7 +855,7 @@ function Add-SCCMRedKey {
 
     Write-Host "  Changing SCCM no approval for 2 minutes" $machineName -ForegroundColor Black -BackgroundColor Green
 
-    c:\temp\psservice.exe \\$machineName -accepteula start winrm
+    .\psservice.exe \\$machineName -accepteula start winrm
 
     Invoke-Command -ComputerName $machineName -ScriptBlock {
 
@@ -889,7 +890,7 @@ function Add-SCCMRedKey {
 
         Write-Host "  Removing print UAC for 30 minutes" $machineName -ForegroundColor Black -BackgroundColor Green
     
-        c:\temp\psservice.exe \\$machineName -accepteula start winrm
+        .\psservice.exe \\$machineName -accepteula start winrm
     
         Invoke-Command -ComputerName $machineName -ScriptBlock {
     
