@@ -162,6 +162,11 @@ Simple open Powershell or Windows Terminal as admin, cd into the SysAd folder an
   ```
 
 
+## Misc
+
+![SysAD Print UAC](https://i.imgur.com/DCLrrKg.png)
+
+
 <!-- LICENSE -->
 ## License
 
