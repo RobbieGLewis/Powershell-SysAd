@@ -64,9 +64,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+![SysAD landing](https://i.imgur.com/kSFsiMB.png)
 
 
-![SysAD terminal interface](https://i.imgur.com/ZuJO7po.png)
+![SysAD terminal interface](https://i.imgur.com/sxEAYHL.png)
 
 SysAd.ps1 is a collection of PowerShell functions served under a terminal interface aimed at System Administrators or Support Engineers to quickly connect via terminal, either Pa/Psexec.exe (CMD) or Powershell, to assist in remote fixes or automating common tasks.
 
@@ -112,7 +113,7 @@ The terminal interface's simplicity means adapting the script for your own bespo
 Script landing page to enter your target's hostname or IP address:
 
 
-![SysAD landing](https://i.imgur.com/6eBl93E.png)
+![SysAD landing](https://i.imgur.com/kSFsiMB.png)
 
 
 ### Built With
