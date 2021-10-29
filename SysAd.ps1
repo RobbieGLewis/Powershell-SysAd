@@ -463,7 +463,7 @@ function Show-Landing {
 
         Write-Host "`n `r "
         Write-Host "`n `r "
-        Write-Host " _____________________________" -ForegroundColor White -BackgroundColor Black
+        Write-Host " _____________________________"
 
         Write-Host ""$CurrentTime
         Write-Host ""$weatherGet -NoNewline
