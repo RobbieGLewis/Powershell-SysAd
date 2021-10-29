@@ -22,6 +22,7 @@ PURPOSE:
 #   https://docs.microsoft.com/en-us/windows-server/remote/remote-server-administration-tools
 
 Import-Module ActiveDirectory
+Import-Module DHCPServer 
 
 Clear-Host
 
