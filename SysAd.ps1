@@ -97,7 +97,7 @@ function Show-ActiveDirectoryMenu {
                 Write-Host "$($i): $($Users[$i].SamAccountName) | $($Users[$i].Name)"
             }
             Write-Host "`n `r "
-            $selection = Read-Host -Prompt 'Select user (0, 1, 2 etc.)'
+            $selection = Read-Host -Prompt "Select user (0, 1, 2 etc.)"
             Write-Host "`n `r "
             $ResultUser = $Users[$selection]
         }
