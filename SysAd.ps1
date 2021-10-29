@@ -695,7 +695,9 @@ function Get-DHCPHostname {
 
     Write-Host "`r`n"
 
-    Get-DhcpServerv4Lease -ComputerName YOUR_DHCP_SERVER-ScopeID 0 | Where-Object {$_.Hostname -like "*$dhcpHN*"}
+    $getDHCP = Get-DhcpServerv4Lease -ComputerName YOUR_DHCP_SERVER-ScopeID 0 | Where-Object {$_.Hostname -like "*$dhcpHN*"}
+
+    Write-Output $getDHCP
 
     Write-Host "`r`n"
 
