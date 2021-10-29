@@ -985,9 +985,11 @@ do
             } 'S' {
                 Clear-Host 
                 Add-SCCMRedKey
+                pause
             } 'P' {
                 Clear-Host 
                 Add-PrintKey
+                pause
             } 'Y' {
                 Clear-Host 
                 Show-ActiveDirectoryMenu
