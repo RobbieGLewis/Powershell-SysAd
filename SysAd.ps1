@@ -766,9 +766,9 @@ function Get-LargestFiles {
      Write-Host "`r`n"
      $userName = Read-Host "User profile to query - C:\Users\"
      Write-Host "`r`n"
-     $recipientEmail = Read-Host "Recipient email address ('@smurfitkappa.co.uk' not required)"
+     $recipientEmail = Read-Host "Recipient email address ('@email.com' not required)"
      Write-Host "`r`n"
-     $senderEmail = Read-Host "Sender email address ('@smurfitkappa.co.uk' not required)"
+     $senderEmail = Read-Host "Sender email address ('@email.com' not required)"
      $fileName = "File Size Report-$userName-$(Get-Date -Format 'dd-MM-yyyy').csv"
 
      Invoke-Command -ComputerName $machineName -ScriptBlock {Get-ChildItem c:\users\$using:userName\ -Recurse -ErrorAction SilentlyContinue | Sort-Object -Descending -Property Length | Select-Object -first 100 FullName, @{Name="Size (MB) ";Expression={[Math]::Round($_.length / 1MB, 2)}}} | Export-CSV -Path C:\temp\$fileName -NoTypeInformation
