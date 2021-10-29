@@ -465,7 +465,7 @@ function Show-Landing {
         Write-Host "`n `r "
         Write-Host " _____________________________" -ForegroundColor White -BackgroundColor Black
 
-        Write-Host ""$CurrentTime -ForegroundColor White -BackgroundColor Black
+        Write-Host ""$CurrentTime
         Write-Host ""$weatherGet -NoNewline
 
         # Display name
@@ -474,11 +474,11 @@ function Show-Landing {
         # $usrFull = ([adsi]"WinNT://$dom/$usr,user").fullname
         
         $Hour = (Get-Date).Hour
-        If ($Hour -lt 12) {Write-Host " Good morning, $usr"-ForegroundColor White -BackgroundColor Black}
-        ElseIf ($Hour -gt 16) {Write-Host " Good evening, $($Env:UserName)"-ForegroundColor White -BackgroundColor Black}
-        Else {Write-Host " Good afternoon, $($Env:UserName)" -ForegroundColor White -BackgroundColor Black}
+        If ($Hour -lt 12) {Write-Host " Good morning, $usr"}
+        ElseIf ($Hour -gt 16) {Write-Host " Good evening, $($Env:UserName)"}
+        Else {Write-Host " Good afternoon, $($Env:UserName)"}
 
-        $machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" -ForegroundColor White -BackgroundColor Black "" -NoNewLine; Read-Host).ToUpper()
+        $machineNamefull = $(Write-Host "" -NoNewLine) + $(Write-Host " Target:" "" -NoNewLine; Read-Host).ToUpper()
         $script:machineName = $machineNamefull.Trim()
         
 
